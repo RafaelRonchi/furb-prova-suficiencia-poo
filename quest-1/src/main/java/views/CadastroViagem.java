@@ -10,24 +10,28 @@ import models.Intermunicipal;
 import models.Viagem;
 
 public class CadastroViagem extends JFrame {
-    private JTextField tfPlaca;
-    private JTextField tfMotorista;
-    private JTextField tfData;
+    private JTextField tfPlaca, tfMotorista, tfData;
     private JComboBox<String> cbTipo;
     private JButton btnCriarViagem;
 
     public CadastroViagem() {
         setTitle("Cadastro de Viagem");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setSize(400, 300);
+        setSize(450, 350);
         setLocationRelativeTo(null);
+        setLayout(new BorderLayout());
 
         JPanel panel = new JPanel(new GridBagLayout());
+        panel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
         GridBagConstraints gbc = new GridBagConstraints();
-        gbc.insets = new Insets(5, 5, 5, 5);
+        gbc.insets = new Insets(8, 8, 8, 8);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Placa do Ônibus
+        JLabel lblTitle = new JLabel("Cadastro de Viagem");
+        lblTitle.setFont(new Font("Arial", Font.BOLD, 18));
+        lblTitle.setHorizontalAlignment(SwingConstants.CENTER);
+        add(lblTitle, BorderLayout.NORTH);
+
         gbc.gridx = 0;
         gbc.gridy = 0;
         panel.add(new JLabel("Placa do Ônibus:"), gbc);
@@ -35,7 +39,6 @@ public class CadastroViagem extends JFrame {
         gbc.gridx = 1;
         panel.add(tfPlaca, gbc);
 
-        // Nome do Motorista
         gbc.gridx = 0;
         gbc.gridy = 1;
         panel.add(new JLabel("Nome do Motorista:"), gbc);
@@ -43,7 +46,6 @@ public class CadastroViagem extends JFrame {
         gbc.gridx = 1;
         panel.add(tfMotorista, gbc);
 
-        // Data da Viagem
         gbc.gridx = 0;
         gbc.gridy = 2;
         panel.add(new JLabel("Data da Viagem (dd/MM/yyyy):"), gbc);
@@ -51,30 +53,29 @@ public class CadastroViagem extends JFrame {
         gbc.gridx = 1;
         panel.add(tfData, gbc);
 
-        // Tipo da Viagem
         gbc.gridx = 0;
         gbc.gridy = 3;
         panel.add(new JLabel("Tipo da Viagem:"), gbc);
-        cbTipo = new JComboBox<>(new String[] {"Municipal", "Intermunicipal"});
+        cbTipo = new JComboBox<>(new String[]{"Municipal", "Intermunicipal"});
         gbc.gridx = 1;
         panel.add(cbTipo, gbc);
 
-        // Botão para criar a viagem
         btnCriarViagem = new JButton("Criar Viagem");
+        btnCriarViagem.setFont(new Font("Arial", Font.BOLD, 14));
+        btnCriarViagem.setBackground(new Color(52, 152, 219));
+        btnCriarViagem.setForeground(Color.WHITE);
+        btnCriarViagem.setFocusPainted(false);
+        btnCriarViagem.setBorder(BorderFactory.createEmptyBorder(10, 20, 10, 20));
+
         gbc.gridx = 0;
         gbc.gridy = 4;
         gbc.gridwidth = 2;
         gbc.anchor = GridBagConstraints.CENTER;
         panel.add(btnCriarViagem, gbc);
 
-        add(panel);
+        add(panel, BorderLayout.CENTER);
 
-        btnCriarViagem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                criarViagem();
-            }
-        });
+        btnCriarViagem.addActionListener(e -> criarViagem());
     }
 
     private void criarViagem() {
@@ -84,38 +85,24 @@ public class CadastroViagem extends JFrame {
         String tipo = (String) cbTipo.getSelectedItem();
 
         if (placa.isEmpty() || motorista.isEmpty() || dataStr.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Preencha todos os campos.");
+            JOptionPane.showMessageDialog(this, "Preencha todos os campos.", "Erro", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
-        // Converte a data informada
-        Date data;
         try {
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            data = sdf.parse(dataStr);
-        } catch(Exception ex) {
-            JOptionPane.showMessageDialog(this, "Data inválida. Utilize o formato dd/MM/yyyy.");
-            return;
-        }
+            Date data = sdf.parse(dataStr);
+            Viagem viagem = "Municipal".equals(tipo) ? new Municipal(placa, motorista, data) : new Intermunicipal(placa, motorista, data);
 
-        Viagem viagem;
-        if ("Municipal".equals(tipo)) {
-            viagem = new Municipal(placa, motorista, data);
-        } else {
-            viagem = new Intermunicipal(placa, motorista, data);
+            new CadastroPassageiros(viagem).setVisible(true);
+            this.dispose();
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(this, "Data inválida. Utilize o formato dd/MM/yyyy.", "Erro", JOptionPane.ERROR_MESSAGE);
         }
-
-        // Abre a tela para cadastro de passageiros e fecha a tela atual
-        CadastroPassageiros cadastroPassageiros = new CadastroPassageiros(viagem);
-        cadastroPassageiros.setVisible(true);
-        this.dispose();
     }
 
     public static void main(String[] args) {
-        SwingUtilities.invokeLater(new Runnable() {
-            public void run() {
-                new CadastroViagem().setVisible(true);
-            }
-        });
+
+        SwingUtilities.invokeLater(() -> new CadastroViagem().setVisible(true));
     }
 }
