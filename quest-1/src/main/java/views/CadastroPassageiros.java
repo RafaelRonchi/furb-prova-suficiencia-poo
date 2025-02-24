@@ -3,6 +3,8 @@ package views;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.List;
+
 import models.Viagem;
 import models.Empresa;
 import models.Passageiro;
@@ -27,6 +29,7 @@ public class CadastroPassageiros extends JFrame {
     private DefaultListModel<String> listModel;
     private JList<String> listPassageiros;
     private JLabel lblTotal;
+
 
     public CadastroPassageiros(Viagem viagem) {
         this.viagem = viagem;
@@ -152,7 +155,40 @@ public class CadastroPassageiros extends JFrame {
                 adicionarPassageiro();
             }
         });
+
+
+        // Botão para criar a empresa e exibir os passageiros mais idosos
+        JButton btnCriarEmpresa = new JButton("Buscar passageiros mais idosos");
+        gbc.gridy = 6;
+        panelForm.add(btnCriarEmpresa, gbc);
+
+        btnCriarEmpresa.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                criarEmpresa();
+            }
+        });
+
     }
+
+    private void criarEmpresa() {
+        empresa = new Empresa();
+        empresa.addViagem(viagem);
+
+        // Obtém os passageiros mais idosos
+        List<Passageiro> idosos = empresa.getPassageirosMaisIdosos();
+
+        if (idosos.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Nenhum passageiro idoso encontrado.");
+        } else {
+            StringBuilder mensagem = new StringBuilder("Passageiro(s) mais idoso(s):\n");
+            for (Passageiro p : idosos) {
+                mensagem.append(p.getNome()).append(" - ").append(p.getIdade()).append(" anos\n");
+            }
+            JOptionPane.showMessageDialog(this, mensagem.toString());
+        }
+    }
+
 
     private void adicionarPassageiro() {
         String nome = tfNome.getText().trim();
