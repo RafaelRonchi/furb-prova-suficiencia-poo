@@ -10,21 +10,18 @@ public class Main {
 
         try {
             ProvaSuficiencia.serializar(origem, destino);
-            System.out.println("Serialização concluída com sucesso em " + destino);
 
             try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(destino))) {
-                @SuppressWarnings("unchecked")
                 Set<Atleta> atletasLidos = (Set<Atleta>) ois.readObject();
-                System.out.println("Objetos lidos do arquivo binário:");
+                System.out.println("obj:");
                 for (Atleta a : atletasLidos) {
-                    System.out.println("CPF: " + a.getCpf());
+                    System.out.println("cpf" + a.getCpf());
                 }
             } catch (IOException | ClassNotFoundException e) {
                 e.printStackTrace();
             }
 
         } catch (EArquivoOrigemIncorreto e) {
-            System.err.println("Erro: " + e.getMessage());
         }
     }
 }

@@ -30,15 +30,15 @@ public class ProvaSuficiencia {
                 atletas.add(atleta);
             }
         }  catch (IOException e) {
-            throw new EArquivoOrigemIncorreto("Erro de leitura: " + e.getMessage());
+            throw new EArquivoOrigemIncorreto("erro leitura: " + e.getMessage());
         } catch (NumberFormatException e) {
-            throw new EArquivoOrigemIncorreto("Erro de formato numérico: " + e.getMessage());
+            throw new EArquivoOrigemIncorreto("erro formato: " + e.getMessage());
         }
 
         try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(arqDestino))) {
             oos.writeObject(atletas);
         } catch (IOException e) {
-            System.err.println("Erro ao serializar atletas: " + e.getMessage());
+            System.err.println("erro ao serializar " + e.getMessage());
         }
     }
 }
