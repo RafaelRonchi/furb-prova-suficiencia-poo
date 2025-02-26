@@ -15,7 +15,6 @@ public class CadastroPassageiros extends JFrame {
     private Viagem viagem;
     private Empresa empresa;
 
-    // Componentes do formulário de cadastro de passageiros
     private JTextField tfNome;
     private JTextField tfIdade;
     private JComboBox<String> cbTipo;
@@ -25,7 +24,6 @@ public class CadastroPassageiros extends JFrame {
     private JTextField tfEscola;
     private JButton btnAdicionar;
 
-    // Componentes para exibir a lista de passageiros e o total da viagem
     private DefaultListModel<String> listModel;
     private JList<String> listPassageiros;
     private JLabel lblTotal;
@@ -40,7 +38,6 @@ public class CadastroPassageiros extends JFrame {
         JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
         mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
 
-        // Painel superior: exibe os dados da viagem
         JPanel panelTrip = new JPanel(new FlowLayout(FlowLayout.LEFT));
         panelTrip.setBorder(BorderFactory.createTitledBorder("Detalhes da Viagem"));
         panelTrip.add(new JLabel("Ônibus: " + viagem.getPlacaOnibus()
@@ -48,14 +45,12 @@ public class CadastroPassageiros extends JFrame {
                 + " - Data: " + viagem.getDataViagem()));
         mainPanel.add(panelTrip, BorderLayout.NORTH);
 
-        // Painel central: formulário para cadastro de passageiro
         JPanel panelForm = new JPanel(new GridBagLayout());
         panelForm.setBorder(BorderFactory.createTitledBorder("Cadastro de Passageiro"));
         GridBagConstraints gbc = new GridBagConstraints();
         gbc.insets = new Insets(5, 5, 5, 5);
         gbc.anchor = GridBagConstraints.WEST;
 
-        // Nome
         gbc.gridx = 0;
         gbc.gridy = 0;
         panelForm.add(new JLabel("Nome:"), gbc);
@@ -63,7 +58,6 @@ public class CadastroPassageiros extends JFrame {
         gbc.gridx = 1;
         panelForm.add(tfNome, gbc);
 
-        // Idade
         gbc.gridx = 0;
         gbc.gridy = 1;
         panelForm.add(new JLabel("Idade:"), gbc);
@@ -71,7 +65,6 @@ public class CadastroPassageiros extends JFrame {
         gbc.gridx = 1;
         panelForm.add(tfIdade, gbc);
 
-        // Tipo do Passageiro
         gbc.gridx = 0;
         gbc.gridy = 2;
         panelForm.add(new JLabel("Tipo:"), gbc);
@@ -79,7 +72,6 @@ public class CadastroPassageiros extends JFrame {
         gbc.gridx = 1;
         panelForm.add(cbTipo, gbc);
 
-        // Campo RG (para Idoso)
         gbc.gridx = 0;
         gbc.gridy = 3;
         lblRG = new JLabel("RG:");
@@ -88,7 +80,6 @@ public class CadastroPassageiros extends JFrame {
         gbc.gridx = 1;
         panelForm.add(tfRG, gbc);
 
-        // Campo Escola (para Estudante)
         gbc.gridx = 0;
         gbc.gridy = 4;
         lblEscola = new JLabel("Escola:");
@@ -97,13 +88,11 @@ public class CadastroPassageiros extends JFrame {
         gbc.gridx = 1;
         panelForm.add(tfEscola, gbc);
 
-        // Inicialmente, campos RG e Escola são ocultos
         lblRG.setVisible(false);
         tfRG.setVisible(false);
         lblEscola.setVisible(false);
         tfEscola.setVisible(false);
 
-        // Exibe os campos conforme o tipo selecionado
         cbTipo.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -129,7 +118,6 @@ public class CadastroPassageiros extends JFrame {
             }
         });
 
-        // Botão para adicionar passageiro
         gbc.gridx = 0;
         gbc.gridy = 5;
         gbc.gridwidth = 2;
@@ -138,7 +126,6 @@ public class CadastroPassageiros extends JFrame {
 
         mainPanel.add(panelForm, BorderLayout.CENTER);
 
-        // Painel inferior: lista de passageiros e total da viagem
         JPanel panelList = new JPanel(new BorderLayout(5, 5));
         panelList.setBorder(BorderFactory.createTitledBorder("Lista de Passageiros"));
         listModel = new DefaultListModel<>();
@@ -159,7 +146,6 @@ public class CadastroPassageiros extends JFrame {
             }
         });
 
-        // Botão para criar a empresa e exibir os passageiros mais idosos
         JButton btnCriarEmpresa = new JButton("Buscar passageiros mais idosos");
         gbc.gridy = 6;
         panelForm.add(btnCriarEmpresa, gbc);
@@ -176,7 +162,6 @@ public class CadastroPassageiros extends JFrame {
         empresa = new Empresa();
         empresa.addViagem(viagem);
 
-        // Obtém os passageiros mais idosos
         List<Passageiro> idosos = empresa.getPassageirosMaisIdosos();
 
         if (idosos.isEmpty()) {
@@ -237,7 +222,6 @@ public class CadastroPassageiros extends JFrame {
         float total = viagem.getValorTotal();
         lblTotal.setText(String.format("Total da Viagem: R$ %.2f", total));
 
-        // Limpa os campos para o próximo cadastro
         tfNome.setText("");
         tfIdade.setText("");
         tfRG.setText("");
